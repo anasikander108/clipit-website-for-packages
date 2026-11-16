@@ -38,7 +38,7 @@ All of these rules are enforced inside Postgres (RLS and `security definer` func
 - Site URL: your website, e.g. `https://clipit.pk`.
 - Redirect URLs: `https://clipit.pk/auth/callback` and `https://clipit.pk/reset-password`. Add the `http://localhost:5173/...` versions for development.
 - Keep **Confirm email** switched on.
-- For real customers, set up **custom SMTP** (Authentication → Emails → SMTP), for example Resend SMTP. Supabase's built-in mailer only sends a few emails per hour.
+- For real customers, set up **custom SMTP** (Authentication → Emails → SMTP), for example Brevo (`smtp-relay.brevo.com`, port 587). Supabase's built-in mailer only sends a few emails per hour.
 
 ### 3. Website environment
 Copy `.env.example` to `.env` and fill in:
@@ -69,12 +69,12 @@ Payment and expiry emails are sent by the two Edge Functions in `supabase/functi
 ```
 supabase functions deploy notify
 supabase functions deploy subscription-reminders --no-verify-jwt
-supabase secrets set RESEND_API_KEY=re_... EMAIL_FROM="Clipit <billing@yourdomain.com>" SITE_URL=https://clipit.pk CRON_SECRET=<long random string>
+supabase secrets set BREVO_API_KEY=xkeysib-... EMAIL_FROM="Clipit <billing@yourdomain.com>" SITE_URL=https://clipit.pk CRON_SECRET=<long random string>
 ```
 
 - `notify` sends four emails: registration, payment submitted, approved and rejected. It decides the recipient and the content from the database, so nobody can use it to send arbitrary mail.
 - `subscription-reminders` sends "ends in 3 days" and "has ended" emails. To run it daily, follow the commented block at the end of the cron migration.
-- Without `RESEND_API_KEY` the functions only log, and nothing else breaks.
+- Without `BREVO_API_KEY` the functions only log, and nothing else breaks.
 
 ### 6. Deploy the website
 - Any static host works.

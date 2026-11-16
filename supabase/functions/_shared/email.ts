@@ -1,4 +1,4 @@
-// Transactional email. Sends through Resend when RESEND_API_KEY is set; otherwise it only logs,
+// Transactional email. Sends through the Brevo transactional API when BREVO_API_KEY is set; otherwise it only logs,
 // so the rest of the flow keeps working before an email provider is connected.
 
 export interface Brand {
@@ -43,21 +43,23 @@ Questions? Reply to this email or write to ${esc(brand.supportEmail || "our supp
 }
 
 export async function sendEmail(brand: Brand, e: Email): Promise<{ sent: boolean; reason?: string }> {
-  const key = Deno.env.get("RESEND_API_KEY");
-  const from = Deno.env.get("EMAIL_FROM");
+  const key = Deno.env.get("BREVO_API_KEY");
+  const from = Deno.env.get("EMAIL_FROM"); // "Clipit <billing@yourdomain.com>" or just the address
   if (!key || !from) {
-    console.log(`[email skipped: no RESEND_API_KEY/EMAIL_FROM] to=${e.to} subject=${e.subject}`);
+    console.log(`[email skipped: no BREVO_API_KEY/EMAIL_FROM] to=${e.to} subject=${e.subject}`);
     return { sent: false, reason: "email provider not configured" };
   }
-  const res = await fetch("https://api.resend.com/emails", {
+  const m = from.match(/^\s*(.*?)\s*<([^>]+)>\s*$/);
+  const sender = m ? { name: m[1] || brand.product, email: m[2] } : { name: brand.product, email: from.trim() };
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
-    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+    headers: { "api-key": key, "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify({
-      from,
-      to: [e.to],
+      sender,
+      to: [{ email: e.to }],
       subject: e.subject,
-      html: renderEmail(brand, e),
-      reply_to: brand.supportEmail || undefined,
+      htmlContent: renderEmail(brand, e),
+      ...(brand.supportEmail ? { replyTo: { email: brand.supportEmail } } : {}),
     }),
   });
   if (!res.ok) {
