@@ -1,20 +1,20 @@
 import {
-  Announcement, ClosingCta, Faq, Footer, Hero, HowItWorks, Moments, Navbar, Platforms, Pricing, ProductCard, Stats, useReveal,
+  CaptionDome, ClosingCta, Faq, FeaturesBento, Footer, Hero, Intro, Navbar, PlaygroundAndUseCases, Pricing, useReveal, useStack, WhatItDoes,
 } from "../../components/landing/Sections";
 
 export default function Landing() {
   useReveal();
+  useStack();
   return (
     <>
-      <Announcement />
+      <Intro />
       <Navbar />
       <main>
         <Hero />
-        <ProductCard />
-        <Moments />
-        <Platforms />
-        <HowItWorks />
-        <Stats />
+        <WhatItDoes />
+        <FeaturesBento />
+        <CaptionDome />
+        <PlaygroundAndUseCases />
         <Pricing />
         <Faq />
         <ClosingCta />

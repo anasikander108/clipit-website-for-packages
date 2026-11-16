@@ -17,7 +17,7 @@ export function Logo({ className, to = "/" }: { className?: string; to?: string 
       ) : (
         <BrandMark className="size-7" />
       )}
-      <span className="font-display text-[14px] font-bold uppercase tracking-[0.18em]">{site.product_name}</span>
+      <span className="text-[16px] font-semibold tracking-[-0.01em]">{site.product_name}</span>
     </Link>
   );
 }
