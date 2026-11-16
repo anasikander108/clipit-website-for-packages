@@ -37,11 +37,11 @@ export default function About() {
           <div className="grid-bg absolute inset-0" />
           <div className="streak" />
           <div className="container-x relative pb-20 pt-36 sm:pb-28 sm:pt-44">
-            <Heading as="h1" size="hero" label="About" title="ClipXo is designed and built by dey.kode.">
-              dey.kode is a design and development studio that sketches ideas, turns them into clean code and ships web apps. ClipXo is one of the products it has designed and built in-house, from the desktop editor to this website.
+            <Heading as="h1" size="hero" label="About" title="ClipXo is designed and built by Deykode.">
+              Deykode is a design and development studio that sketches ideas, turns them into clean code and ships web apps. ClipXo is one of the products it has designed and built in-house, from the desktop editor to this website.
             </Heading>
             <div className="reveal mt-9 flex flex-col justify-center gap-3 sm:flex-row" style={{ transitionDelay: "0.2s" }}>
-              <a href={DEYKODE} target="_blank" rel="noopener noreferrer" className={orangeBtn()}>Visit dey.kode <ArrowUpRight className="size-4" /></a>
+              <a href={DEYKODE} target="_blank" rel="noopener noreferrer" className={orangeBtn()}>Visit Deykode <ArrowUpRight className="size-4" /></a>
               <a href="/#pricing" className={ghostBtn()}>See ClipXo plans</a>
             </div>
           </div>
@@ -54,7 +54,7 @@ export default function About() {
               <p className="eyebrow">The studio</p>
               <h2 className="h-display mt-3 text-[28px] leading-[1.15] sm:text-[36px]">Ideas sketched, built in clean code, and shipped.</h2>
               <p className="mt-5 max-w-[460px] text-[15px] leading-relaxed text-muted">
-                The name says what the studio does: say “they code” fast enough and you get dey.kode. Every project is designed and built in-house, so the people who plan your product are the ones who ship it.
+                The name says what the studio does: say “they code” fast enough and you get Deykode. Every project is designed and built in-house, so the people who plan your product are the ones who ship it.
               </p>
             </div>
             <div className="grid gap-3 sm:grid-cols-3">
@@ -71,7 +71,7 @@ export default function About() {
         {/* how they work */}
         <section className="border-b border-line py-20 sm:py-28">
           <div className="container-x">
-            <Heading label="How dey.kode works" title="From first call to launch." >
+            <Heading label="How Deykode works" title="From first call to launch." >
               A clear plan and price before work begins, feedback at every step and no surprises along the way.
             </Heading>
             <ol className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -93,7 +93,7 @@ export default function About() {
         {/* work */}
         <section className="border-b border-line py-20 sm:py-28">
           <div className="container-x">
-            <Heading label="Work" title="Products dey.kode has built." />
+            <Heading label="Work" title="Products Deykode has built." />
             <div className="mt-12 grid gap-px overflow-hidden rounded-[16px] border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
               {PROJECTS.map(([name, what], i) => (
                 <div key={name} className="reveal bg-canvas p-6" style={{ transitionDelay: `${i * 0.05}s` }}>
@@ -121,10 +121,10 @@ export default function About() {
                 ))}
               </ul>
               <div className="relative mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                <a href={DEYKODE} target="_blank" rel="noopener noreferrer" className={orangeBtn()}>Start a project with dey.kode <ArrowUpRight className="size-4" /></a>
+                <a href={DEYKODE} target="_blank" rel="noopener noreferrer" className={orangeBtn()}>Start a project with Deykode <ArrowUpRight className="size-4" /></a>
                 <a href="mailto:deykode.support@gmail.com" className={ghostBtn()}>deykode.support@gmail.com</a>
               </div>
-              <p className="relative mt-4 text-[12.5px] text-muted">dey.kode replies within 24 hours.</p>
+              <p className="relative mt-4 text-[12.5px] text-muted">Deykode replies within 24 hours.</p>
             </div>
           </div>
         </section>

@@ -732,7 +732,7 @@ export function Footer() {
         <div className="container-x flex flex-col justify-between gap-2 py-6 text-[12.5px] text-faint sm:flex-row">
           <p>© {new Date().getFullYear()} {site.product_name}. All rights reserved.</p>
           <p>Designed and built by{" "}
-            <a href="https://www.deykode.com" target="_blank" rel="noopener noreferrer" className="font-medium text-ink-2 hover:text-orange">dey.kode</a>
+            <a href="https://www.deykode.com" target="_blank" rel="noopener noreferrer" className="font-medium text-ink-2 hover:text-orange">Deykode</a>
           </p>
           <div className="flex gap-5">
             <Link to="/terms" className="hover:text-ink">Terms and Conditions</Link>
