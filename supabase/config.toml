@@ -14,3 +14,11 @@ verify_jwt = true
 [functions.subscription-reminders]
 # called by pg_cron with a shared secret instead of a user token
 verify_jwt = false
+
+[auth.email.template.confirmation]
+subject = "Confirm your Clipit email"
+content_path = "./supabase/templates/confirm.html"
+
+[auth.email.template.recovery]
+subject = "Reset your Clipit password"
+content_path = "./supabase/templates/recovery.html"
