@@ -7,11 +7,11 @@ type Variant = "primary" | "secondary" | "ghost" | "danger" | "teal";
 type Size = "sm" | "md" | "lg";
 
 const VARIANTS: Record<Variant, string> = {
-  primary: "bg-ink text-white hover:bg-ink-2 border border-ink",
-  secondary: "bg-canvas text-ink border border-line-strong hover:border-ink/40 hover:bg-paper",
-  ghost: "text-ink-2 hover:bg-sand border border-transparent",
-  danger: "bg-red text-white hover:bg-red/90 border border-red",
-  teal: "bg-teal text-white hover:bg-teal-dark border border-teal",
+  primary: "bg-white text-night hover:bg-[#e9e7ff] border border-white",
+  secondary: "bg-transparent text-ink border border-line-strong hover:border-lilac/50 hover:bg-white/[0.04]",
+  ghost: "text-ink-2 hover:bg-white/[0.06] border border-transparent",
+  danger: "bg-red-soft text-red border border-red/40 hover:bg-red/20",
+  teal: "bg-violet text-white hover:bg-teal-dark border border-violet",
 };
 const SIZES: Record<Size, string> = {
   sm: "h-8 px-3 text-[13px] gap-1.5",
@@ -85,7 +85,7 @@ const TONES: Record<Tone, string> = {
   teal: "bg-teal-soft text-teal-dark border-teal/20",
   amber: "bg-amber-soft text-amber border-amber/20",
   red: "bg-red-soft text-red border-red/20",
-  ink: "bg-ink text-white border-ink",
+  ink: "bg-white text-night border-white",
 };
 
 export function Badge({ tone = "neutral", children, className }: { tone?: Tone; children: ReactNode; className?: string }) {
@@ -151,7 +151,7 @@ export function Modal({ open, onClose, title, children, footer, wide }: { open: 
   }, [open, onClose]);
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40 p-0 sm:items-center sm:p-6" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-[#01010d]/70 p-0 sm:items-center sm:p-6" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
       <div role="dialog" aria-modal="true" aria-label={title}
         className={cx("animate-fade-up flex max-h-[92vh] w-full flex-col rounded-t-xl border border-line bg-canvas shadow-[var(--shadow-pop)] sm:rounded-xl", wide ? "sm:max-w-3xl" : "sm:max-w-lg")}>
         <div className="flex items-center justify-between border-b border-line px-5 py-4">
@@ -192,7 +192,7 @@ export function CopyButton({ value, label = "Copy" }: { value: string; label?: s
           setTimeout(() => setDone(false), 1600);
         } catch { /* clipboard blocked: the value is still visible to copy by hand */ }
       }}
-      className="inline-flex h-8 items-center gap-1.5 rounded-md border border-line-strong bg-canvas px-2.5 text-[12.5px] font-medium text-ink-2 hover:bg-paper"
+      className="inline-flex h-8 items-center gap-1.5 rounded-md border border-line-strong bg-transparent px-2.5 text-[12.5px] font-medium text-ink-2 hover:bg-white/[0.06]"
       aria-label={`${label}: ${value}`}
     >
       {done ? <Check className="size-3.5 text-teal" /> : <Copy className="size-3.5" />}

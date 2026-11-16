@@ -1,14 +1,20 @@
-import { Announcement, ClosingCta, Faq, Features, Footer, Hero, HowItWorks, Navbar, Pricing } from "../../components/landing/Sections";
+import {
+  Announcement, ClosingCta, Faq, Footer, Hero, HowItWorks, Moments, Navbar, Platforms, Pricing, ProductCard, Stats, useReveal,
+} from "../../components/landing/Sections";
 
 export default function Landing() {
+  useReveal();
   return (
     <>
       <Announcement />
       <Navbar />
       <main>
         <Hero />
-        <Features />
+        <ProductCard />
+        <Moments />
+        <Platforms />
         <HowItWorks />
+        <Stats />
         <Pricing />
         <Faq />
         <ClosingCta />

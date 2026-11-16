@@ -1,81 +1,197 @@
 @import "tailwindcss";
 
-/* Warm neutral palette, ink text, one teal accent. No gradients, glows or glass. */
+/* ClipXo "Eclipse" theme (see clipxo-ui-style.md): near-black navy, electric blue + violet light,
+   white text, white primary button. Semantic names are kept so every page follows the theme:
+   paper = page, canvas = raised surface, sand = subtle fill, ink = primary text, teal = accent. */
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --font-display: "Orbitron", "Inter", sans-serif;
 
-  --color-canvas: #ffffff;
-  --color-paper: #faf9f7;
-  --color-sand: #f2f0ec;
-  --color-line: #e6e3dd;
-  --color-line-strong: #cfcac2;
-  --color-ink: #1a1814;
-  --color-ink-2: #3a3833;
-  --color-muted: #66635d;
-  --color-faint: #96928b;
-  --color-teal: #1d7a6c;
-  --color-teal-dark: #155e53;
-  --color-teal-soft: #e8f3f0;
-  --color-amber: #9a6411;
-  --color-amber-soft: #fbf3e2;
-  --color-red: #b42318;
-  --color-red-soft: #fdeeec;
-  --color-clay: #c4724e;
+  --color-paper: #03031a;
+  --color-canvas: #07072a;
+  --color-sand: #10103a;
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-line-strong: rgb(255 255 255 / 0.16);
+  --color-ink: #ffffff;
+  --color-ink-2: #c8cbea;
+  --color-muted: #8a8fb8;
+  --color-faint: #6a6f9c;
+  --color-night: #05051f;
 
-  --shadow-card: 0 1px 2px rgb(26 24 20 / 0.04), 0 1px 1px rgb(26 24 20 / 0.03);
-  --shadow-pop: 0 12px 32px -12px rgb(26 24 20 / 0.18), 0 2px 6px rgb(26 24 20 / 0.06);
+  --color-blue: #2a2aff;
+  --color-blue-deep: #1010b8;
+  --color-violet: #7a4dff;
+  --color-lilac: #b9a8ff;
+
+  --color-teal: #7a4dff;
+  --color-teal-dark: #6a3df0;
+  --color-teal-soft: rgb(122 77 255 / 0.14);
+  --color-clay: #b9a8ff;
+  --color-amber: #f3c36b;
+  --color-amber-soft: rgb(243 195 107 / 0.1);
+  --color-red: #ff7d8a;
+  --color-red-soft: rgb(255 125 138 / 0.1);
+
+  --shadow-card: 0 1px 0 rgb(255 255 255 / 0.03) inset;
+  --shadow-pop: 0 30px 80px -30px rgb(0 0 0 / 0.8), 0 0 0 1px rgb(255 255 255 / 0.06);
+  --shadow-glow: 0 0 24px rgb(185 168 255 / 0.45);
+  --shadow-glow-hover: 0 0 36px rgb(185 168 255 / 0.7);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 80px;
+    scroll-padding-top: 90px;
     -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
+    color-scheme: dark;
   }
   body {
-    @apply bg-canvas text-ink font-sans;
-    font-feature-settings: "cv11", "ss01";
+    @apply bg-paper text-ink font-sans;
   }
   ::selection {
-    background: var(--color-teal-soft);
+    background: rgb(122 77 255 / 0.35);
   }
   :focus-visible {
-    outline: 2px solid var(--color-teal);
+    outline: 2px solid var(--color-lilac);
     outline-offset: 2px;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
   }
 }
 
 @layer components {
   .container-x {
-    @apply mx-auto w-full max-w-[1180px] px-5 sm:px-8;
+    @apply mx-auto w-full max-w-[1120px] px-5 sm:px-8;
   }
   .eyebrow {
-    @apply text-[12px] font-medium uppercase tracking-[0.08em] text-muted;
+    @apply text-[12px] font-medium uppercase tracking-[0.12em] text-muted;
   }
   .h-display {
-    @apply font-semibold tracking-[-0.035em] text-ink;
+    @apply font-medium tracking-[-0.02em] text-ink;
   }
   .card {
-    @apply rounded-xl border border-line bg-canvas shadow-[var(--shadow-card)];
+    @apply rounded-[14px] border border-line bg-canvas;
   }
   .input {
-    @apply h-10 w-full rounded-lg border border-line-strong bg-canvas px-3 text-[14px] text-ink placeholder:text-faint
-      transition-colors outline-none focus:border-ink focus:ring-2 focus:ring-ink/10 disabled:bg-sand disabled:text-muted;
+    @apply h-10 w-full rounded-lg border border-line-strong bg-paper px-3 text-[14px] text-ink placeholder:text-faint
+      transition-colors outline-none focus:border-lilac focus:ring-2 focus:ring-violet/25 disabled:bg-sand disabled:text-muted;
   }
   textarea.input {
     @apply h-auto min-h-[96px] py-2.5 leading-relaxed;
   }
-  .grid-lines {
-    background-image: linear-gradient(to right, rgb(26 24 20 / 0.045) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(26 24 20 / 0.045) 1px, transparent 1px);
-    background-size: 56px 56px;
+  select.input option {
+    background: var(--color-canvas);
   }
+}
+
+/* ---------- landing visuals ---------- */
+.glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 50% 40% at 50% 40%, rgb(42 42 255 / 0.55), transparent 70%);
+  filter: blur(40px);
+  animation: glow-pulse 6s ease-in-out infinite;
+}
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 1; }
+}
+
+.ring {
+  --ring: min(140vw, 1500px);
+  width: var(--ring);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -62%);
+  border: 2px solid var(--color-lilac);
+  box-shadow: 0 0 20px 2px var(--color-lilac), 0 0 80px 10px var(--color-blue), inset 0 -60px 120px -20px var(--color-blue);
+  animation: ring-in 1.2s var(--ease-out-soft) both;
+}
+@keyframes ring-in {
+  from { opacity: 0; filter: brightness(0.4); }
+  to { opacity: 1; filter: none; }
+}
+
+.crescent {
+  width: 180px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--color-paper);
+  box-shadow: -14px 0 30px 2px var(--color-lilac), -40px 0 120px 20px var(--color-blue);
+}
+
+.orb {
+  width: 320px;
+  max-width: 70vw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 25%, rgb(122 77 255 / 0.5), rgb(10 10 50 / 0.2) 60%, transparent 75%);
+  box-shadow: inset 0 0 40px rgb(185 168 255 / 0.25);
+}
+
+.feature-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--color-canvas) 40%, rgb(122 77 255 / 0.55) 130%);
+  border: 1px solid var(--color-line);
+  border-radius: 20px;
+}
+.feature-card::after {
+  content: "";
+  position: absolute;
+  left: -20%;
+  right: -20%;
+  bottom: 0;
+  height: 45%;
+  pointer-events: none;
+  background:
+    linear-gradient(rgb(185 168 255 / 0.15) 1px, transparent 1px) 0 0 / 100% 28px,
+    linear-gradient(90deg, rgb(185 168 255 / 0.15) 1px, transparent 1px) 0 0 / 28px 100%;
+  transform: perspective(400px) rotateX(60deg);
+  transform-origin: bottom;
+  mask-image: linear-gradient(transparent, #000);
+}
+
+.btn-glow {
+  box-shadow: var(--shadow-glow);
+  transition: transform 0.2s var(--ease-out-soft), box-shadow 0.2s var(--ease-out-soft), background-color 0.2s;
+}
+.btn-glow:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-glow-hover);
+}
+
+/* hero wordmark: letters slide in from the sides, de-blurring */
+.wm-letter {
+  display: inline-block;
+  animation: letter-in 0.9s var(--ease-out-soft) both;
+}
+@keyframes letter-in {
+  from { opacity: 0; filter: blur(8px); transform: translateX(var(--from, 0)); }
+  to { opacity: 1; filter: none; transform: none; }
+}
+.fade-in {
+  animation: fade-in 0.9s var(--ease-out-soft) both;
+}
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* reveal on scroll (JS adds .in) */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.9s var(--ease-out-soft), transform 0.9s var(--ease-out-soft);
+}
+.reveal.in {
+  opacity: 1;
+  transform: none;
 }
 
 @keyframes fade-up {
@@ -84,4 +200,10 @@
 }
 .animate-fade-up {
   animation: fade-up 0.4s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
 }

@@ -17,7 +17,7 @@ export function Logo({ className, to = "/" }: { className?: string; to?: string 
       ) : (
         <BrandMark className="size-7" />
       )}
-      <span className="text-[16px]">{site.product_name}</span>
+      <span className="font-display text-[14px] font-bold uppercase tracking-[0.18em]">{site.product_name}</span>
     </Link>
   );
 }
@@ -148,7 +148,7 @@ export function TableToolbar({ search, onSearch, placeholder, filters, filter, o
         <div className="flex flex-wrap gap-1">
           {filters.map((f) => (
             <button key={f.value} onClick={() => onFilter(f.value)}
-              className={cx("h-8 rounded-md px-3 text-[13px] font-medium transition-colors", filter === f.value ? "bg-ink text-white" : "text-muted hover:bg-sand hover:text-ink")}>
+              className={cx("h-8 rounded-md px-3 text-[13px] font-medium transition-colors", filter === f.value ? "bg-white text-night" : "text-muted hover:bg-sand hover:text-ink")}>
               {f.label}{f.count != null && <span className="ml-1.5 opacity-70">{f.count}</span>}
             </button>
           ))}

@@ -77,7 +77,7 @@ function ScreenshotViewer({ path }: { path: string }) {
     <>
       <button onClick={() => { setScale(1); setZoomOpen(true); }} className="group relative block w-full overflow-hidden rounded-lg border border-line bg-paper">
         <img src={url} alt="Payment screenshot" className="mx-auto max-h-[420px] object-contain" />
-        <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-md bg-ink/85 px-2.5 py-1 text-[12.5px] text-white"><ZoomIn className="size-3.5" /> Zoom</span>
+        <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-md bg-night/85 px-2.5 py-1 text-[12.5px] text-white"><ZoomIn className="size-3.5" /> Zoom</span>
       </button>
       <Modal open={zoomOpen} onClose={() => setZoomOpen(false)} title="Payment screenshot" wide>
         <div className="mb-3 flex items-center gap-2">

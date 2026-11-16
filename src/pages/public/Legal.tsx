@@ -6,7 +6,7 @@ function LegalPage({ title, sections }: { title: string; sections: [string, stri
   return (
     <>
       <Navbar />
-      <main className="container-x max-w-3xl py-16 sm:py-20">
+      <main className="container-x max-w-3xl pb-20 pt-32 sm:pt-40">
         <p className="eyebrow">Legal</p>
         <h1 className="h-display mt-3 text-[36px] sm:text-[44px]">{title}</h1>
         <p className="mt-3 text-[14px] text-muted">These terms apply to {site.product_name} and its website.</p>
