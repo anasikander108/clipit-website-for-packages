@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import {
-  ArrowRight, ArrowUpRight, AudioLines, CalendarDays, Captions, ChevronRight, Clock3, Download, Film, Gamepad2, Globe,
+  ArrowRight, ArrowUpRight, AudioLines, Captions, Check, ChevronRight, Download, Film, Gamepad2,
   Languages, Menu, Mic, Play, Scissors, Sparkles, SplitSquareVertical, Upload, Wand2, X,
 } from "lucide-react";
 import { useAuth } from "../../lib/auth";
@@ -119,13 +119,19 @@ function Section({ id, tone, z, children, className, ember }: { id?: string; ton
 /* ------------------------------------------------------------------ intro + nav */
 
 export function Intro() {
-  const [show] = useState(() => {
+  const [show, setShow] = useState(() => {
     try {
       if (sessionStorage.getItem("clipxo.intro")) return false;
       sessionStorage.setItem("clipxo.intro", "1");
     } catch { /* storage blocked: show it */ }
     return true;
   });
+  // the CSS fades it out; this removes it even if animations are paused or blocked
+  useEffect(() => {
+    if (!show) return;
+    const t = setTimeout(() => setShow(false), 1600);
+    return () => clearTimeout(t);
+  }, [show]);
   if (!show) return null;
   return <div className="intro" aria-hidden><BrandMark className="size-14 text-white" /></div>;
 }
@@ -584,33 +590,29 @@ const CTA_LABEL: Record<string, string> = { starter: "Get started", pro: "Get Pr
 
 function PriceCard({ pkg, href }: { pkg: Package; href: string }) {
   const featured = pkg.recommended; // the recommended plan sits in the middle and gets the orange treatment
-  const rows: [IconType, string][] = [
-    [CalendarDays, `${durationLabel(pkg.duration_days)} of access`],
-    [Clock3, `${Number(pkg.daily_hours)} hours of video a day`],
-    [Download, `${pkg.daily_exports} exports a day`],
-    [Languages, "Urdu, Hindi and English"],
-    [Globe, pkg.web_access ? "Desktop app + web app" : "Desktop app"],
-  ];
   return (
-    <div className={cx("relative flex flex-col overflow-hidden rounded-[20px] border bg-canvas p-7", featured ? "order-first border-orange/30 lg:order-none" : "border-line")}>
+    <div className={cx("relative flex flex-col rounded-[20px] border bg-canvas p-7", featured ? "order-first border-orange/40 lg:order-none" : "border-line")}>
       {featured && <span className="absolute inset-y-6 left-0 w-px bg-orange shadow-[0_0_12px_2px_rgb(255_90_31/0.6)]" />}
+      {featured && <span className="absolute -top-3 left-7 rounded-full bg-orange px-2.5 py-0.5 text-[11.5px] font-medium text-white">Recommended</span>}
       <div className="flex items-center justify-between gap-2">
-        <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-muted">{pkg.name}</span>
-        {pkg.recommended && <span className="rounded-full bg-orange/15 px-2.5 py-0.5 text-[11px] font-medium text-orange-hot">Recommended</span>}
+        <h3 className="text-[18px] font-semibold">{pkg.name}</h3>
         {pkg.web_access && <span className="rounded-full border border-line-strong px-2.5 py-0.5 text-[11px] text-ink-2">Desktop + Web</span>}
       </div>
-      <div className="mt-5 flex items-baseline gap-1.5">
-        <span className="text-[32px] font-semibold tracking-[-0.02em]">{pkr(pkg.price_pkr)}</span>
-        <span className="text-[13px] text-muted">/ {durationLabel(pkg.duration_days)}</span>
+      <p className="mt-2 min-h-[42px] text-[14px] leading-snug text-muted">{pkg.tagline}</p>
+      <div className="mt-6 flex items-baseline gap-1.5">
+        <span className="text-[36px] font-semibold tracking-[-0.02em]">{pkr(pkg.price_pkr)}</span>
+        <span className="text-[14px] text-muted">/ {durationLabel(pkg.duration_days)}</span>
       </div>
-      <p className="mt-1.5 text-[13.5px] leading-snug text-muted">{pkg.tagline}</p>
-      <ul className="mt-6 space-y-3 border-t border-line pt-6 text-[13.5px]">
-        {rows.map(([Icon, text]) => <li key={text} className="flex items-center gap-2.5 text-ink-2"><Icon className="size-3.5 shrink-0 text-muted" />{text}</li>)}
-      </ul>
-      <Link to={href} className={cx("mt-8 inline-flex h-11 items-center justify-center rounded-xl text-[14px] font-medium transition-colors",
+      <p className="mt-1.5 text-[14px] text-ink-2">{Number(pkg.daily_hours)} hours of video a day</p>
+      <Link to={href} className={cx("mt-6 inline-flex h-11 items-center justify-center rounded-xl text-[14px] font-medium transition-colors",
         featured ? "btn-ember bg-orange text-white hover:bg-[#ff6e3a]" : "bg-sand text-ink hover:bg-[#232326]")}>
         {CTA_LABEL[pkg.slug] ?? `Get ${pkg.name}`}
       </Link>
+      <ul className="mt-7 space-y-3 border-t border-line pt-6 text-[14px]">
+        {pkg.features.map((f) => (
+          <li key={f} className="flex gap-2.5 text-ink-2"><Check className="mt-0.5 size-4 shrink-0 text-orange" strokeWidth={2} />{f}</li>
+        ))}
+      </ul>
     </div>
   );
 }
