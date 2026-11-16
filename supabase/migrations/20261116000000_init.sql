@@ -150,9 +150,9 @@ create index activity_logs_created_idx on public.activity_logs (created_at desc)
 insert into public.packages (slug, name, tagline, price_pkr, duration_days, daily_hours, daily_exports, web_access, recommended, sort_order, features) values
   ('starter', 'Starter', 'For creators trying ClipXo on their own channel.', 2099, 30, 5, 3, false, false, 1,
    array['Desktop software', 'AI moment detection', 'Automatic transcription', 'Short clip generation', '5 hours of video a day', 'One month of access']),
-  ('business', 'Business', 'For agencies and teams publishing every day.', 49500, 365, 20, 3, true, false, 2,
+  ('business', 'Business', 'For agencies and teams publishing every day.', 49500, 365, 20, 3, true, false, 3,
    array['Desktop software', 'Web application access', '20 hours of video a day', 'One year of access', 'Priority support', 'Business-level access']),
-  ('pro', 'Pro', 'For channels that publish shorts every week.', 5199, 90, 7, 3, false, true, 3,
+  ('pro', 'Pro', 'For channels that publish shorts every week.', 5199, 90, 7, 3, false, true, 2,
    array['Everything in Starter', 'Desktop software', '7 hours of video a day', 'Three months of access', 'Priority customer support']);
 
 insert into public.bank_settings (id) values (1);

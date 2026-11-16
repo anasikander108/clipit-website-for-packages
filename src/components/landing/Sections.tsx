@@ -583,7 +583,7 @@ export function PlaygroundAndUseCases() {
 const CTA_LABEL: Record<string, string> = { starter: "Get started", pro: "Get Pro", business: "Get Business" };
 
 function PriceCard({ pkg, href }: { pkg: Package; href: string }) {
-  const featured = pkg.web_access;
+  const featured = pkg.recommended; // the recommended plan sits in the middle and gets the orange treatment
   const rows: [IconType, string][] = [
     [CalendarDays, `${durationLabel(pkg.duration_days)} of access`],
     [Clock3, `${Number(pkg.daily_hours)} hours of video a day`],
@@ -597,7 +597,7 @@ function PriceCard({ pkg, href }: { pkg: Package; href: string }) {
       <div className="flex items-center justify-between gap-2">
         <span className="text-[12px] font-medium uppercase tracking-[0.1em] text-muted">{pkg.name}</span>
         {pkg.recommended && <span className="rounded-full bg-orange/15 px-2.5 py-0.5 text-[11px] font-medium text-orange-hot">Recommended</span>}
-        {featured && <span className="rounded-full border border-line-strong px-2.5 py-0.5 text-[11px] text-ink-2">Desktop + Web</span>}
+        {pkg.web_access && <span className="rounded-full border border-line-strong px-2.5 py-0.5 text-[11px] text-ink-2">Desktop + Web</span>}
       </div>
       <div className="mt-5 flex items-baseline gap-1.5">
         <span className="text-[32px] font-semibold tracking-[-0.02em]">{pkr(pkg.price_pkr)}</span>
