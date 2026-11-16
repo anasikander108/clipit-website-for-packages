@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import {
-  CreditCard, Download, ExternalLink, HardDriveDownload, LayoutDashboard, LifeBuoy, Lock, Mail, Receipt, Settings, Shield, Sparkle,
+  CreditCard, Download, ExternalLink, HardDriveDownload, LayoutDashboard, LifeBuoy, Lock, Mail, Receipt, Settings, Shield,
 } from "lucide-react";
 import { db, errorMessage, notify } from "../../lib/supabase";
 import { useAuth } from "../../lib/auth";
@@ -273,7 +273,7 @@ export function DownloadPage() {
               <div className="space-y-4">
                 {d.sub?.instructions && (
                   <div className="card p-6">
-                    <h2 className="flex items-center gap-2 text-[15px] font-semibold"><Sparkle className="size-4 text-teal" /> Notes for you</h2>
+                    <h2 className="text-[15px] font-semibold">Notes from our team</h2>
                     <p className="mt-3 whitespace-pre-line text-[14px] leading-relaxed text-ink-2">{d.sub.instructions}</p>
                   </div>
                 )}

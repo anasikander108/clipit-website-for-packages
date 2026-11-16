@@ -1,5 +1,5 @@
 import {
-  CaptionDome, ClosingCta, Faq, FeaturesBento, Footer, Hero, Intro, Navbar, PlaygroundAndUseCases, Pricing, useReveal, useStack, WhatItDoes,
+  CaptionDome, ClosingCta, Faq, FeaturesBento, Footer, Hero, Navbar, PlaygroundAndUseCases, Pricing, useReveal, useStack, WhatItDoes,
 } from "../../components/landing/Sections";
 
 export default function Landing() {
@@ -7,7 +7,6 @@ export default function Landing() {
   useStack();
   return (
     <>
-      <Intro />
       <Navbar />
       <main>
         <Hero />
