@@ -6,6 +6,7 @@ import { RequireAdmin, RequireAuth, RequireSupabase } from "./components/common"
 import { LinkButton } from "./components/ui";
 import Landing from "./pages/public/Landing";
 import { Privacy, Terms } from "./pages/public/Legal";
+import About from "./pages/public/About";
 import { AuthCallback, ForgotPassword, Login, Register, ResetPassword, VerifyEmail } from "./pages/auth/Auth";
 import { Checkout, CheckoutSubmitted } from "./pages/checkout/Checkout";
 import {
@@ -47,6 +48,7 @@ export default function App() {
           <ScrollManager />
           <Routes>
             <Route path="/" element={<Landing />} />
+            <Route path="/about" element={<About />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
 

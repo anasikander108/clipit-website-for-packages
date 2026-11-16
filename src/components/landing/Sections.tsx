@@ -20,8 +20,8 @@ const NAV = [
 ] as const;
 
 const btnBase = "inline-flex items-center justify-center gap-2 rounded-full font-medium whitespace-nowrap transition-colors";
-const orangeBtn = (extra = "") => cx(btnBase, "btn-ember h-11 bg-orange px-6 text-[14px] text-white hover:bg-[#ff6e3a]", extra);
-const ghostBtn = (extra = "") => cx(btnBase, "h-11 border border-line-strong px-6 text-[14px] text-ink hover:bg-white/[0.05]", extra);
+export const orangeBtn = (extra = "") => cx(btnBase, "btn-ember h-11 bg-orange px-6 text-[14px] text-white hover:bg-[#ff6e3a]", extra);
+export const ghostBtn = (extra = "") => cx(btnBase, "h-11 border border-line-strong px-6 text-[14px] text-ink hover:bg-white/[0.05]", extra);
 const whiteBtn = (extra = "") => cx(btnBase, "h-10 bg-white px-5 text-[13px] text-night hover:bg-white/90", extra);
 const delay = (s: number): CSSProperties => ({ transitionDelay: `${s}s` });
 const reducedMotion = () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -86,7 +86,7 @@ function PillLabel({ icon: Icon, children, light }: { icon?: IconType; children:
 }
 
 /** Centred heading whose words turn from grey to full colour one by one when it scrolls in. */
-function Heading({ label, title, children, light, icon, as: Tag = "h2", size = "section" }: {
+export function Heading({ label, title, children, light, icon, as: Tag = "h2", size = "section" }: {
   label?: string; title: string; children?: ReactNode; light?: boolean; icon?: IconType; as?: "h1" | "h2"; size?: "hero" | "section";
 }) {
   const words = title.split(" ");
@@ -169,6 +169,7 @@ export function Navbar() {
           ) : <Logo />}
           <nav className="hidden flex-1 items-center justify-center gap-6 md:flex">
             {NAV.map(([label, href]) => <a key={href} href={`/${href}`} className="text-[13px] font-medium text-muted transition-colors hover:text-ink">{label}</a>)}
+            <Link to="/about" className="text-[13px] font-medium text-muted transition-colors hover:text-ink">About</Link>
           </nav>
           <div className="ml-auto hidden items-center gap-2 md:flex">
             {cta ? (
@@ -191,6 +192,7 @@ export function Navbar() {
             {NAV.map(([label, href]) => (
               <a key={href} href={`/${href}`} onClick={() => setOpen(false)} className="block rounded-lg px-3 py-2.5 text-[15px] text-ink-2 hover:bg-white/5">{label}</a>
             ))}
+            <Link to="/about" onClick={() => setOpen(false)} className="block rounded-lg px-3 py-2.5 text-[15px] text-ink-2 hover:bg-white/5">About</Link>
             <div className="mt-2 grid grid-cols-2 gap-2 border-t border-line pt-3">
               {cta ? <Link to={cta.to} className={orangeBtn("col-span-2")}>{cta.label}</Link> : (
                 <>
@@ -699,7 +701,8 @@ export function ClosingCta() {
 export function Footer() {
   const { site } = useSite();
   const cols: [string, ReactNode[]][] = [
-    ["Product", NAV.map(([l, h]) => <a key={h} href={`/${h}`} className="hover:text-ink">{l}</a>)],
+    ["Product", [...NAV.map(([l, h]) => <a key={h} href={`/${h}`} className="hover:text-ink">{l}</a>),
+      <Link key="about" to="/about" className="hover:text-ink">About</Link>]],
     ["Account", [
       <Link key="l" to="/login" className="hover:text-ink">Log in</Link>,
       <Link key="r" to="/register" className="hover:text-ink">Create account</Link>,
@@ -728,6 +731,9 @@ export function Footer() {
       <div className="border-t border-line">
         <div className="container-x flex flex-col justify-between gap-2 py-6 text-[12.5px] text-faint sm:flex-row">
           <p>© {new Date().getFullYear()} {site.product_name}. All rights reserved.</p>
+          <p>Designed and built by{" "}
+            <a href="https://www.deykode.com" target="_blank" rel="noopener noreferrer" className="font-medium text-ink-2 hover:text-orange">dey.kode</a>
+          </p>
           <div className="flex gap-5">
             <Link to="/terms" className="hover:text-ink">Terms and Conditions</Link>
             <Link to="/privacy" className="hover:text-ink">Privacy Policy</Link>
