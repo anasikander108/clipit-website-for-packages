@@ -1,4 +1,6 @@
-// A static, decorative rendering of the Clipit desktop editor (aria-hidden). Colours follow the app.
+// A static, decorative rendering of the ClipXo desktop editor (aria-hidden). Colours follow the app.
+import { BrandMark } from "../BrandMark";
+
 const clips = [
   { name: "Cricket ka sab se bara sabaq", time: "12:04 – 12:52", score: 9 },
   { name: "Pehli salary ki kahani", time: "27:41 – 28:30", score: 8 },
@@ -14,8 +16,8 @@ export function AppMockup() {
       {/* title bar */}
       <div className="flex h-9 items-center border-b border-[#2b2e33] bg-[#151619] px-3">
         <div className="flex items-center gap-2 text-[11px] font-semibold text-[#e8e9eb]">
-          <span className="grid size-4 place-items-center rounded-[4px] bg-[#ff4d6d]"><svg viewBox="0 0 16 16" className="size-2.5"><path d="M5 3.5v9l7.5-4.5z" fill="#fff" /></svg></span>
-          Clipit
+          <BrandMark className="size-4 text-white" />
+          ClipXo
         </div>
         <div className="ml-4 hidden gap-1.5 sm:flex">
           {["Open video", "Save", "Auto clips"].map((b) => (

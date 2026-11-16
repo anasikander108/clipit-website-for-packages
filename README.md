@@ -1,6 +1,6 @@
-# Clipit website
+# ClipXo website
 
-This folder holds the marketing site, the customer dashboard and the admin dashboard for selling Clipit subscriptions. It is built with React, TypeScript, Vite, Tailwind and Supabase.
+This folder holds the marketing site, the customer dashboard and the admin dashboard for selling ClipXo subscriptions. It is built with React, TypeScript, Vite, Tailwind and Supabase.
 
 ```
 npm install
@@ -35,8 +35,8 @@ All of these rules are enforced inside Postgres (RLS and `security definer` func
    - Access checks compare against the expiry time directly, so they do not wait for this job.
 
 ### 2. Auth settings (Authentication → URL configuration / Providers → Email)
-- Site URL: your website, e.g. `https://clipit.pk`.
-- Redirect URLs: `https://clipit.pk/auth/callback` and `https://clipit.pk/reset-password`. Add the `http://localhost:5173/...` versions for development.
+- Site URL: your website, e.g. `https://clipxo.com`.
+- Redirect URLs: `https://yourdomain.com/auth/callback` and `https://yourdomain.com/reset-password`. Add the `http://localhost:5173/...` versions for development.
 - Keep **Confirm email** switched on.
 - For real customers, set up **custom SMTP** (Authentication → Emails → SMTP), for example Brevo (`smtp-relay.brevo.com`, port 587). Supabase's built-in mailer only sends a few emails per hour.
 
@@ -69,7 +69,7 @@ Payment and expiry emails are sent by the two Edge Functions in `supabase/functi
 ```
 supabase functions deploy notify
 supabase functions deploy subscription-reminders --no-verify-jwt
-supabase secrets set BREVO_API_KEY=xkeysib-... EMAIL_FROM="Clipit <billing@yourdomain.com>" SITE_URL=https://clipit.pk CRON_SECRET=<long random string>
+supabase secrets set BREVO_API_KEY=xkeysib-... EMAIL_FROM="ClipXo <billing@yourdomain.com>" SITE_URL=https://yourdomain.com CRON_SECRET=<long random string>
 ```
 
 - `notify` sends four emails: registration, payment submitted, approved and rejected. It decides the recipient and the content from the database, so nobody can use it to send arbitrary mail.

@@ -30,7 +30,7 @@ export function renderEmail(brand: Brand, e: Email): string {
   return `<!doctype html><html><body style="margin:0;background:#f4f2ee;font-family:Inter,Segoe UI,Arial,sans-serif;color:#1a1814;font-size:15px">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="padding:32px 12px"><tr><td align="center">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border:1px solid #e4e1db;border-radius:12px">
-<tr><td style="padding:22px 28px;border-bottom:1px solid #eeebe6;font-weight:700;font-size:16px">${esc(brand.product)}</td></tr>
+<tr><td style="padding:22px 28px;border-bottom:1px solid #eeebe6;font-weight:700;font-size:16px">${brand.siteUrl ? `<img src="${esc(brand.siteUrl)}/email-logo.png" width="28" height="28" alt="" style="display:inline-block;vertical-align:middle;border:0;border-radius:6px;margin-right:10px">` : ""}<span style="vertical-align:middle">${esc(brand.product)}</span></td></tr>
 <tr><td style="padding:28px">
 <h1 style="margin:0 0 16px;font-size:21px;letter-spacing:-0.01em">${esc(e.heading)}</h1>
 ${paras}
@@ -44,7 +44,7 @@ Questions? Reply to this email or write to ${esc(brand.supportEmail || "our supp
 
 export async function sendEmail(brand: Brand, e: Email): Promise<{ sent: boolean; reason?: string }> {
   const key = Deno.env.get("BREVO_API_KEY");
-  const from = Deno.env.get("EMAIL_FROM"); // "Clipit <billing@yourdomain.com>" or just the address
+  const from = Deno.env.get("EMAIL_FROM"); // "ClipXo <billing@yourdomain.com>" or just the address
   if (!key || !from) {
     console.log(`[email skipped: no BREVO_API_KEY/EMAIL_FROM] to=${e.to} subject=${e.subject}`);
     return { sent: false, reason: "email provider not configured" };

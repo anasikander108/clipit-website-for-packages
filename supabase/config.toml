@@ -1,5 +1,5 @@
 # Supabase CLI settings for this project (only what differs from the defaults).
-project_id = "clipit-website"
+project_id = "clipxo-website"
 
 [auth]
 site_url = "http://localhost:5173"
@@ -16,9 +16,9 @@ verify_jwt = true
 verify_jwt = false
 
 [auth.email.template.confirmation]
-subject = "Confirm your Clipit email"
+subject = "Confirm your ClipXo email"
 content_path = "./supabase/templates/confirm.html"
 
 [auth.email.template.recovery]
-subject = "Reset your Clipit password"
+subject = "Reset your ClipXo password"
 content_path = "./supabase/templates/recovery.html"

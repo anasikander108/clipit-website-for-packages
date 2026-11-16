@@ -228,7 +228,7 @@ export function DownloadPage() {
     <WithData>
       {(d) => (
         <>
-          <PageHeader title="Download software" description="The Clipit desktop application for Windows 10 and 11 (64-bit)." />
+          <PageHeader title="Download software" description="The ClipXo desktop application for Windows 10 and 11 (64-bit)." />
           {d.status !== "active" || !d.release ? (
             <div className="card">
               <EmptyState icon={Lock} title={d.status === "active" ? "The download is being prepared" : "The download unlocks after your payment is approved"}
@@ -249,7 +249,7 @@ export function DownloadPage() {
                   <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                       <p className="text-[13px] text-muted">Latest version</p>
-                      <p className="mt-1 text-[24px] font-semibold tracking-[-0.02em]">Clipit {d.release.version}</p>
+                      <p className="mt-1 text-[24px] font-semibold tracking-[-0.02em]">ClipXo {d.release.version}</p>
                       <p className="mt-1 text-[13.5px] text-muted">Released {date(d.release.release_date)}</p>
                     </div>
                     <a href={d.release.download_url} target="_blank" rel="noopener noreferrer" className={btn("primary", "lg")}>
@@ -279,7 +279,7 @@ export function DownloadPage() {
                 )}
                 <div className="card p-6 text-[14px] leading-relaxed text-ink-2">
                   <h2 className="text-[15px] font-semibold text-ink">Signing in to the app</h2>
-                  <p className="mt-2">Open Clipit and sign in with the same email and password you use on this website. The app picks up your plan and daily limits automatically.</p>
+                  <p className="mt-2">Open ClipXo and sign in with the same email and password you use on this website. The app picks up your plan and daily limits automatically.</p>
                 </div>
               </div>
             </div>
@@ -422,7 +422,7 @@ export function Support() {
         <h2 className="text-[15px] font-semibold text-ink">Before you write</h2>
         <ul className="mt-2 list-disc space-y-1 pl-5">
           <li>Payment questions: include your transaction reference.</li>
-          <li>Software problems: include the Clipit version and what you were doing when it happened.</li>
+          <li>Software problems: include the ClipXo version and what you were doing when it happened.</li>
           <li>Limit questions: daily allowances reset at midnight Pakistan time.</li>
         </ul>
       </div>

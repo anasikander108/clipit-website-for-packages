@@ -3,7 +3,7 @@ import { supabase } from "./supabase";
 import type { WebsiteSettings } from "./types";
 
 const DEFAULTS: WebsiteSettings = {
-  product_name: "Clipit",
+  product_name: "ClipXo",
   logo_url: "",
   support_email: "",
   contact_phone: "",

@@ -6,6 +6,7 @@ import { useAuth } from "../lib/auth";
 import { useSite } from "../lib/site";
 import { cx } from "../lib/format";
 import { Spinner, btn } from "./ui";
+import { BrandMark } from "./BrandMark";
 
 export function Logo({ className, to = "/" }: { className?: string; to?: string }) {
   const { site } = useSite();
@@ -14,9 +15,7 @@ export function Logo({ className, to = "/" }: { className?: string; to?: string 
       {site.logo_url ? (
         <img src={site.logo_url} alt="" className="size-7 rounded-md object-contain" />
       ) : (
-        <span className="grid size-7 place-items-center rounded-md bg-ink" aria-hidden>
-          <svg viewBox="0 0 16 16" className="size-3.5"><path d="M5 3.5v9l7.5-4.5z" fill="#fff" /></svg>
-        </span>
+        <BrandMark className="size-7" />
       )}
       <span className="text-[16px]">{site.product_name}</span>
     </Link>

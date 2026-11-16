@@ -20,7 +20,7 @@ export function adminClient(): SupabaseClient {
 export async function loadBrand(db: SupabaseClient): Promise<Brand> {
   const { data } = await db.from("website_settings").select("product_name, support_email").eq("id", 1).maybeSingle();
   return {
-    product: data?.product_name || "Clipit",
+    product: data?.product_name || "ClipXo",
     supportEmail: data?.support_email || "",
     siteUrl: Deno.env.get("SITE_URL") || "",
   };

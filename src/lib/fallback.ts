@@ -6,7 +6,7 @@ import type { Package } from "./types";
  */
 export const FALLBACK_PACKAGES: Package[] = [
   {
-    id: "starter", slug: "starter", name: "Starter", tagline: "For creators trying Clipit on their own channel.",
+    id: "starter", slug: "starter", name: "Starter", tagline: "For creators trying ClipXo on their own channel.",
     price_pkr: 2099, duration_days: 30, daily_hours: 5, daily_exports: 3, web_access: false, recommended: false, sort_order: 1, is_active: true,
     features: ["Desktop software", "AI moment detection", "Automatic transcription", "Short clip generation", "5 hours of video a day", "One month of access"],
   },

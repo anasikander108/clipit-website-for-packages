@@ -1,4 +1,4 @@
--- Clipit website: tables, row-level security and the business functions.
+-- ClipXo website: tables, row-level security and the business functions.
 -- Every rule that matters (who can approve, when access expires, daily limits) is enforced here,
 -- not in the browser.
 
@@ -126,7 +126,7 @@ create table public.bank_settings (
 
 create table public.website_settings (
   id integer primary key default 1 check (id = 1),
-  product_name text not null default 'Clipit',
+  product_name text not null default 'ClipXo',
   logo_url text not null default '',
   support_email text not null default '',
   contact_phone text not null default '',
@@ -148,7 +148,7 @@ create index activity_logs_created_idx on public.activity_logs (created_at desc)
 
 -- ---------------------------------------------------------------- seed data
 insert into public.packages (slug, name, tagline, price_pkr, duration_days, daily_hours, daily_exports, web_access, recommended, sort_order, features) values
-  ('starter', 'Starter', 'For creators trying Clipit on their own channel.', 2099, 30, 5, 3, false, false, 1,
+  ('starter', 'Starter', 'For creators trying ClipXo on their own channel.', 2099, 30, 5, 3, false, false, 1,
    array['Desktop software', 'AI moment detection', 'Automatic transcription', 'Short clip generation', '5 hours of video a day', 'One month of access']),
   ('business', 'Business', 'For agencies and teams publishing every day.', 49500, 365, 20, 3, true, false, 2,
    array['Desktop software', 'Web application access', '20 hours of video a day', 'One year of access', 'Priority support', 'Business-level access']),

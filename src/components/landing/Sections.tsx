@@ -118,12 +118,12 @@ function SectionHead({ eyebrow, title, children, center }: { eyebrow: string; ti
 }
 
 const FEATURES = [
-  { icon: ScanSearch, title: "AI-powered moment detection", body: "Clipit reads the whole conversation and scores each moment, so the strongest parts of a long video rise to the top." },
+  { icon: ScanSearch, title: "AI-powered moment detection", body: "ClipXo reads the whole conversation and scores each moment, so the strongest parts of a long video rise to the top." },
   { icon: AudioLines, title: "Automatic transcription", body: "Speech becomes timed text in Urdu, Hindi or English. Captions come out in Roman Urdu or Hindi, word by word." },
   { icon: Scissors, title: "Smart clip generation", body: "Make several vertical shorts from one long video, each with captions, a face-aware crop and a clean 9:16 frame." },
   { icon: Clock3, title: "Hours back every week", body: "Skip scrubbing through a two-hour podcast. Review suggested clips, adjust the edges and export." },
   { icon: MonitorDown, title: "Desktop software", body: "Videos are processed by a dedicated Windows application with hardware-accelerated export." },
-  { icon: Globe, title: "Web access", body: "Business customers can also work from the browser with the Clipit web application." , tag: "Business" },
+  { icon: Globe, title: "Web access", body: "Business customers can also work from the browser with the ClipXo web application." , tag: "Business" },
 ];
 
 export function Features() {
@@ -180,7 +180,7 @@ function Languages_() {
 
 const STEPS = [
   { icon: Upload, title: "Upload your long-form video", body: "Open a podcast, interview or stream recording in the desktop app." },
-  { icon: ScanSearch, title: "AI analyses the content", body: "Clipit transcribes the speech and scores every moment." },
+  { icon: ScanSearch, title: "AI analyses the content", body: "ClipXo transcribes the speech and scores every moment." },
   { icon: Check, title: "Select the best moments", body: "Keep the suggestions you like and trim their edges on the timeline." },
   { icon: Scissors, title: "Generate your short clips", body: "Export captioned 9:16 shorts, ready for YouTube, TikTok and Reels." },
 ];
@@ -277,14 +277,14 @@ export function Pricing() {
 }
 
 const FAQS: [string, string][] = [
-  ["What is this software?", "Clipit is a Windows desktop application that turns long videos such as podcasts, interviews and streams into short vertical clips with captions, ready for YouTube Shorts, TikTok and Instagram Reels."],
-  ["How does AI clipping work?", "Clipit transcribes the speech in your video, then a language model reads the transcript and scores each moment for how likely it is to hold attention on its own. The best moments become suggested clips that you can review, trim and export."],
+  ["What is this software?", "ClipXo is a Windows desktop application that turns long videos such as podcasts, interviews and streams into short vertical clips with captions, ready for YouTube Shorts, TikTok and Instagram Reels."],
+  ["How does AI clipping work?", "ClipXo transcribes the speech in your video, then a language model reads the transcript and scores each moment for how likely it is to hold attention on its own. The best moments become suggested clips that you can review, trim and export."],
   ["Which languages can it transcribe?", "Urdu, Hindi and English, including speech that mixes Urdu or Hindi with English. Captions can be shown in Roman Urdu, Roman Hindi or English."],
   ["How do I purchase a subscription?", "Create an account, choose a plan and transfer the amount to our bank account. Then submit the transaction reference and a screenshot of the transfer. Our team checks it against our bank records and activates your plan."],
   ["How will I receive the software?", "As soon as your payment is approved, a download button appears in your dashboard together with installation instructions. We also send you an email."],
   ["Can I use the software on multiple devices?", "Your subscription belongs to your account. You can sign in on another computer, but the daily processing allowance is shared across all of them."],
   ["What happens when my subscription expires?", "The software stops processing new videos, but your account and payment history are kept. Renew at any time; if you renew early, the new days are added after your current expiry date."],
-  ["How do daily processing limits work?", "Each plan allows a number of hours of source video per day (5, 7 or 20) and 3 exports per day. The allowance resets at midnight Pakistan time. If a video is longer than what is left, Clipit tells you exactly how much time remains today."],
+  ["How do daily processing limits work?", "Each plan allows a number of hours of source video per day (5, 7 or 20) and 3 exports per day. The allowance resets at midnight Pakistan time. If a video is longer than what is left, ClipXo tells you exactly how much time remains today."],
   ["How can I contact support?", "Use the Support page in your dashboard or email us at the address in the footer. Pro and Business customers get priority replies."],
 ];
 
@@ -319,7 +319,7 @@ export function ClosingCta() {
         <div className="flex flex-col items-start justify-between gap-8 rounded-xl bg-ink px-8 py-12 text-white sm:px-12 lg:flex-row lg:items-center">
           <div>
             <h2 className="text-[30px] font-semibold leading-tight tracking-[-0.03em] sm:text-[38px]">Your next ten shorts are already recorded.</h2>
-            <p className="mt-3 max-w-xl text-[16px] text-white/65">Open one long video and let Clipit find them.</p>
+            <p className="mt-3 max-w-xl text-[16px] text-white/65">Open one long video and let ClipXo find them.</p>
           </div>
           <a href="#pricing" className={btn("secondary", "lg", "border-white bg-white text-ink hover:bg-white/90")}>See plans <ArrowRight className="size-4" /></a>
         </div>
