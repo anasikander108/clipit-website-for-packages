@@ -1,7 +1,9 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
-const url = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+const env = import.meta.env;
+// VITE_* from .env, or the NEXT_PUBLIC_* names Supabase's Vercel integration sets
+const url = (env.VITE_SUPABASE_URL || env.NEXT_PUBLIC_SUPABASE_URL) as string | undefined;
+const anonKey = (env.VITE_SUPABASE_ANON_KEY || env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || env.NEXT_PUBLIC_SUPABASE_ANON_KEY) as string | undefined;
 
 /** True when the site has real Supabase credentials. Without them we show a setup screen instead of fake auth. */
 export const isConfigured = Boolean(url && anonKey && /^https:\/\//.test(url));
