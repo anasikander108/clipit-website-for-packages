@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import {
-  ArrowRight, ArrowUpRight, AudioLines, Captions, Check, ChevronRight, Download, Gamepad2,
-  Languages, Menu, Mic, Play, Scissors, SplitSquareVertical, Upload, ScanSearch, X,
+  ArrowRight, ArrowUpRight, AudioLines, Captions, Check, ChevronRight, Download, Film, Gamepad2,
+  CircleHelp, Languages, LayoutGrid, Menu, Mic, Play, ScanSearch, Scissors, SplitSquareVertical, Tag, Upload, Users, X,
 } from "lucide-react";
 import { useAuth } from "../../lib/auth";
 import { useSite } from "../../lib/site";
@@ -19,8 +19,8 @@ const NAV = [
   ["FAQ", "#faq"],
 ] as const;
 
-const btnBase = "inline-flex items-center justify-center gap-2 rounded-lg font-medium whitespace-nowrap transition-colors";
-const orangeBtn = (extra = "") => cx(btnBase, "h-11 bg-orange px-6 text-[14px] text-white hover:bg-[#ff6e3a]", extra);
+const btnBase = "inline-flex items-center justify-center gap-2 rounded-full font-medium whitespace-nowrap transition-colors";
+const orangeBtn = (extra = "") => cx(btnBase, "btn-ember h-11 bg-orange px-6 text-[14px] text-white hover:bg-[#ff6e3a]", extra);
 const ghostBtn = (extra = "") => cx(btnBase, "h-11 border border-line-strong px-6 text-[14px] text-ink hover:bg-white/[0.05]", extra);
 const whiteBtn = (extra = "") => cx(btnBase, "h-10 bg-white px-5 text-[13px] text-night hover:bg-white/90", extra);
 const delay = (s: number): CSSProperties => ({ transitionDelay: `${s}s` });
@@ -77,33 +77,64 @@ function useTicker(count: number, ms = 350) {
 
 /* ------------------------------------------------------------------ shared bits */
 
-function PillLabel({ children, light }: { children: ReactNode; light?: boolean }) {
-  return <span className={cx("text-[12px] font-medium uppercase tracking-[0.06em]", light ? "text-light-dim" : "text-muted")}>{children}</span>;
+function PillLabel({ icon: Icon, children, light }: { icon?: IconType; children: ReactNode; light?: boolean }) {
+  return (
+    <span className={cx("pill-label", light ? "border-light-line bg-light-card text-light-ink" : "border-line bg-canvas text-ink-2")}>
+      {Icon && <Icon className="size-3 text-orange" />} {children}
+    </span>
+  );
 }
 
-function Heading({ label, title, children, light, as: Tag = "h2", size = "section" }: {
-  label?: string; title: string; children?: ReactNode; light?: boolean; as?: "h1" | "h2"; size?: "hero" | "section";
+/** Centred heading whose words turn from grey to full colour one by one when it scrolls in. */
+function Heading({ label, title, children, light, icon, as: Tag = "h2", size = "section" }: {
+  label?: string; title: string; children?: ReactNode; light?: boolean; icon?: IconType; as?: "h1" | "h2"; size?: "hero" | "section";
 }) {
+  const words = title.split(" ");
+  const style = { "--word-from": light ? "#c4c3bf" : "#55555b", "--word-to": light ? "#0e0e10" : "#ffffff" } as CSSProperties;
   return (
-    <div className="reveal mx-auto max-w-[720px] text-center">
-      {label && <div className="mb-4"><PillLabel light={light}>{label}</PillLabel></div>}
-      <Tag className={cx("h-display leading-[1.1]", size === "hero" ? "text-[34px] sm:text-[56px]" : "text-[28px] sm:text-[40px]")}>{title}</Tag>
+    <div className="reveal mx-auto max-w-[720px] text-center" style={style}>
+      {label && <div className="mb-5"><PillLabel icon={icon} light={light}>{label}</PillLabel></div>}
+      <Tag className={cx("h-display leading-[1.1]", size === "hero" ? "text-[34px] sm:text-[56px]" : "text-[28px] sm:text-[40px]")} aria-label={title}>
+        {words.map((w, i) => (
+          <span key={i} aria-hidden>
+            <span className="word" style={{ animationDelay: `${0.15 + i * 0.06}s` }}>{w}</span>{i < words.length - 1 ? " " : ""}
+          </span>
+        ))}
+      </Tag>
       {children && <p className={cx("mx-auto mt-5 max-w-[460px] text-[15px] leading-relaxed", light ? "text-light-dim" : "text-muted")}>{children}</p>}
     </div>
   );
 }
 
-function Section({ id, tone, z, children, className }: { id?: string; tone: "dark" | "light"; z: number; children: ReactNode; className?: string }) {
+function Section({ id, tone, z, children, className, ember }: { id?: string; tone: "dark" | "light"; z: number; children: ReactNode; className?: string; ember?: boolean }) {
   return (
     <section id={id} style={{ zIndex: z }}
       className={cx("stack overflow-hidden shadow-[0_-24px_60px_rgb(0_0_0/0.35)]",
-        tone === "dark" ? "bg-paper text-ink" : "bg-light text-light-ink", className)}>
+        tone === "dark" ? "bg-paper text-ink" : "bg-light text-light-ink", ember && "ember-bottom", className)}>
       {children}
     </section>
   );
 }
 
 /* ------------------------------------------------------------------ intro + nav */
+
+export function Intro() {
+  const [show, setShow] = useState(() => {
+    try {
+      if (sessionStorage.getItem("clipxo.intro")) return false;
+      sessionStorage.setItem("clipxo.intro", "1");
+    } catch { /* storage blocked: show it */ }
+    return true;
+  });
+  // the CSS fades it out; this removes it even if animations are paused or blocked
+  useEffect(() => {
+    if (!show) return;
+    const t = setTimeout(() => setShow(false), 1600);
+    return () => clearTimeout(t);
+  }, [show]);
+  if (!show) return null;
+  return <div className="intro" aria-hidden><BrandMark className="size-14 text-white" /></div>;
+}
 
 export function Navbar() {
   const { session } = useAuth();
@@ -122,7 +153,7 @@ export function Navbar() {
     <header className="fixed inset-x-0 top-0 z-50">
       <div className={cx("overflow-hidden border-b border-line bg-paper text-center text-[12px] text-muted transition-all duration-300", scrolled ? "h-0 border-transparent" : "h-8")}>
         <a href="/#pricing" className="inline-flex h-8 items-center gap-2 px-4 hover:text-ink">
-          <span className="size-1.5 shrink-0 rounded-full bg-orange" />
+          <span className="size-1.5 shrink-0 rounded-full bg-orange shadow-[0_0_8px_var(--color-orange)]" />
           <span className="truncate">{site.announcement.trim() || "Plans from Rs. 2,099 · Urdu, Hindi and English captions"}</span>
           <ArrowRight className="size-3 shrink-0" />
         </a>
@@ -130,9 +161,9 @@ export function Navbar() {
 
       <div className={cx("mx-auto transition-all duration-500", scrolled ? "mt-3 max-w-[660px] px-4" : "max-w-[1160px] px-5 sm:px-8")}>
         <div className={cx("flex items-center gap-6 transition-all duration-500",
-          scrolled ? "h-12 rounded-xl border border-line bg-sand px-1.5" : "h-16")}>
+          scrolled ? "h-12 rounded-full border border-line bg-sand/95 px-1.5 backdrop-blur" : "h-16 bg-paper/0")}>
           {scrolled ? (
-            <a href="/#top" className="grid size-9 shrink-0 place-items-center rounded-lg bg-orange" aria-label={site.product_name}>
+            <a href="/#top" className="grid size-9 shrink-0 place-items-center rounded-full bg-orange" aria-label={site.product_name}>
               <BrandMark className="size-5 text-white" />
             </a>
           ) : <Logo />}
@@ -151,7 +182,7 @@ export function Navbar() {
               </>
             )}
           </div>
-          <button className="ml-auto rounded-lg p-2 text-ink-2 hover:bg-white/5 md:hidden" onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open}>
+          <button className="ml-auto rounded-full p-2 text-ink-2 hover:bg-white/5 md:hidden" onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open}>
             {open ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
         </div>
@@ -179,6 +210,7 @@ export function Navbar() {
 
 /** Long 16:9 video -> ClipXo -> 9:16 shorts, with orange pulses running along the wires. */
 function ClipEngine() {
+  const [pulses] = useState(() => !reducedMotion());
   const wires = [
     { id: "w-in", d: "M262 210 C330 210 370 210 436 210" },
     { id: "w-1", d: "M564 200 C650 200 660 92 740 92" },
@@ -197,8 +229,20 @@ function ClipEngine() {
   );
   return (
     <svg viewBox="0 0 910 420" className="mx-auto w-full max-w-[900px]" aria-hidden>
-      {wires.map((w) => (
-        <path key={w.id} id={w.id} d={w.d} pathLength={1} fill="none" stroke="rgb(255 255 255 / 0.18)" strokeWidth="1.5" />
+      <defs>
+        <radialGradient id="core" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#ff8a3d" stopOpacity="0.55" />
+          <stop offset="100%" stopColor="#ff5a1f" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      {wires.map((w, i) => (
+        <path key={w.id} id={w.id} d={w.d} pathLength={1} fill="none" stroke="rgb(255 255 255 / 0.18)" strokeWidth="1.5" className="draw" style={{ animationDelay: `${0.3 + i * 0.15}s` }} />
+      ))}
+      {pulses && wires.map((w, i) => (
+        <circle key={`p-${w.id}`} r="4" fill="#ff8a3d" opacity="0">
+          <animate attributeName="opacity" values="0;1;1;0" dur="3s" begin={`${1.6 + i * 0.4}s`} repeatCount="indefinite" />
+          <animateMotion dur="3s" begin={`${1.6 + i * 0.4}s`} repeatCount="indefinite"><mpath href={`#${w.id}`} /></animateMotion>
+        </circle>
       ))}
 
       <g transform="translate(40 146)">
@@ -211,6 +255,7 @@ function ClipEngine() {
         <text x="2" y="-12" fontSize="13" fill="#8b8b90">1:12:40 podcast</text>
       </g>
 
+      <circle cx="500" cy="210" r="110" fill="url(#core)" />
       <g transform="translate(436 146)">
         <rect width="128" height="128" rx="30" fill="#161617" stroke="rgb(255 90 31 / 0.6)" strokeWidth="1.5" />
         <g transform="translate(34 34) scale(0.6)"><path d={MARK_PATH} fill="#ff5a1f" fillRule="evenodd" /></g>
@@ -225,11 +270,12 @@ function ClipEngine() {
 
 export function Hero() {
   return (
-    <Section id="top" tone="dark" z={1} className="!rounded-none">
+    <Section id="top" tone="dark" z={1} ember className="!rounded-none">
       <div className="grid-bg absolute inset-0" />
+      <div className="streak" />
       <div className="container-x relative pb-24 pt-36 sm:pb-32 sm:pt-44">
-        <Heading as="h1" size="hero" label="For Urdu, Hindi and English videos" title="Turn long videos into short clips with captions.">
-          ClipXo transcribes your video, suggests the strongest moments and exports them as captioned 9:16 clips for Shorts, Reels and TikTok.
+        <Heading as="h1" size="hero" label="AI clipping for Urdu, Hindi and English" icon={Scissors} title="Turn long videos into viral shorts.">
+          ClipXo finds the most engaging moments in your long-form videos and turns them into captioned, ready-to-publish short clips.
         </Heading>
         <div className="reveal mt-9 flex flex-col justify-center gap-3 sm:flex-row" style={delay(0.2)}>
           <a href="#pricing" className={orangeBtn()}>Get started <ArrowRight className="size-4" /></a>
@@ -271,21 +317,24 @@ const PASTEL = ["bg-[#e3f4e8] text-[#2f7a46]", "bg-[#fbf1d6] text-[#8a6410]", "b
 export function WhatItDoes() {
   const steps = [
     { icon: Upload, title: "Open a long video", body: "Podcast, interview, stream or vlog." },
-    { icon: ScanSearch, title: "ClipXo suggests the moments", body: "Speech is transcribed and every moment scored." },
+    { icon: ScanSearch, title: "ClipXo picks the moments", body: "Speech is transcribed and every moment scored." },
     { icon: Download, title: "Export your shorts", body: "Captioned 9:16 clips, ready to post." },
   ];
   return (
     <Section id="how-it-works" tone="light" z={2}>
+      <div className="grid-bg absolute inset-0" style={{ "--grid-line": "rgb(0 0 0 / 0.05)" } as CSSProperties} />
       <div className="container-x relative py-20 sm:py-[140px]">
         <div className="grid gap-5 lg:grid-cols-2">
-          <div className="reveal relative flex min-h-[520px] items-center justify-center overflow-hidden rounded-xl bg-night p-10">
+          <div className="reveal relative flex min-h-[520px] items-center justify-center overflow-hidden rounded-[20px] bg-night p-10">
+            <div className="streak" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-[radial-gradient(ellipse_60%_80%_at_50%_100%,rgb(255_90_31/0.35),transparent_70%)]" />
             <CaptionPhone />
           </div>
-          <div className="reveal flex flex-col justify-center rounded-xl border border-light-line bg-light-card p-8 shadow-[0_1px_2px_rgb(0_0_0/0.04)] sm:p-12" style={delay(0.1)}>
-            <div><PillLabel light>How it works</PillLabel></div>
+          <div className="reveal flex flex-col justify-center rounded-[20px] border border-light-line bg-light-card p-8 shadow-[0_20px_60px_rgb(0_0_0/0.06)] sm:p-12" style={delay(0.1)}>
+            <div><PillLabel light icon={Film}>What it does</PillLabel></div>
             <h2 className="h-display mt-5 text-[28px] leading-[1.1] sm:text-[40px]">Long video in.<br />Shorts out.</h2>
             <p className="mt-4 max-w-[420px] text-[15px] leading-relaxed text-light-dim">
-              ClipXo transcribes the speech, scores each part of the conversation and suggests clips. You review them, adjust the edges and export with captions.
+              ClipXo reads the whole conversation, suggests the clips most likely to hold attention, and captions them word by word in the language your audience speaks.
             </p>
             <ul className="mt-8 space-y-4">
               {steps.map(({ icon: Icon, title, body }, k) => (
@@ -297,10 +346,14 @@ export function WhatItDoes() {
             </ul>
           </div>
         </div>
-        <div className="mt-10 flex flex-wrap justify-center gap-2">
-          {CHIPS.map((c) => (
-            <span key={c} className="rounded-md border border-light-line bg-light-card px-3 py-1.5 text-[13px] font-medium">{c}</span>
-          ))}
+        <div className="marquee-wrap relative mt-10 overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_10%,#000_90%,transparent)]">
+          <div className="marquee">
+            {[...CHIPS, ...CHIPS].map((c, k) => (
+              <span key={k} className="mr-3 inline-flex items-center gap-2 rounded-full border border-light-line bg-light-card px-4 py-2 text-[13px] font-medium" aria-hidden={k >= CHIPS.length}>
+                <span className="size-1.5 rounded-full bg-orange" />{c}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
     </Section>
@@ -311,10 +364,10 @@ export function WhatItDoes() {
 
 function Bento({ title, body, children, className, i }: { title: string; body: string; children: ReactNode; className?: string; i: number }) {
   return (
-    <div className={cx("reveal flex min-h-[300px] flex-col rounded-xl border border-line bg-canvas p-6", className)} style={delay(i * 0.08)}>
+    <div className={cx("reveal group flex min-h-[300px] flex-col rounded-[20px] border border-line bg-canvas p-6 transition-colors hover:border-orange/35", className)} style={delay(i * 0.08)}>
       <h3 className="text-[15px] font-semibold">{title}</h3>
       <p className="mt-1.5 max-w-[340px] text-[13.5px] leading-relaxed text-muted">{body}</p>
-      <div className="mt-auto flex flex-1 items-end justify-center pt-6">{children}</div>
+      <div className="mt-auto flex flex-1 items-end justify-center pt-6 [&_.hot]:transition-[filter] group-hover:[&_.hot]:brightness-125">{children}</div>
     </div>
   );
 }
@@ -324,21 +377,22 @@ function CaptionLine() {
   const i = useTicker(words.length);
   return (
     <div className="flex flex-wrap justify-center gap-1.5 rounded-xl border border-line bg-sand px-4 py-3 text-[17px] font-bold">
-      {words.map((w, k) => <span key={k} className={k === i ? "text-orange" : "text-ink-2"}>{w}</span>)}
+      {words.map((w, k) => <span key={k} className={k === i ? "hot text-orange [text-shadow:0_0_14px_rgb(255_90_31/0.6)]" : "text-ink-2"}>{w}</span>)}
     </div>
   );
 }
 
 export function FeaturesBento() {
+  const glow = { filter: "drop-shadow(0 0 8px rgb(255 90 31 / 0.6))" };
   return (
     <Section id="features" tone="dark" z={3}>
       <div className="container-x relative py-20 sm:py-[140px]">
-        <Heading label="Features" title="From a long recording to finished clips." />
+        <Heading label="Features" icon={LayoutGrid} title="Everything between a long video and a finished short." />
         <div className="mt-14 grid gap-4 lg:grid-cols-4">
-          <Bento i={0} className="lg:col-span-2" title="Moment detection" body="Every moment is scored, so the strongest parts of a two-hour video rise to the top.">
+          <Bento i={0} className="lg:col-span-2" title="AI moment detection" body="Every moment is scored, so the strongest parts of a two-hour video rise to the top.">
             <svg viewBox="0 0 420 80" className="w-full" aria-hidden>
               <rect x="0" y="30" width="420" height="20" rx="10" fill="#1d1d20" stroke="rgb(255 255 255 / 0.08)" />
-              {[[30, 46], [170, 62], [318, 40]].map(([x, w]) => <rect key={x} x={x} y="30" width={w} height="20" rx="10" fill="#ff5a1f" />)}
+              {[[30, 46], [170, 62], [318, 40]].map(([x, w]) => <rect key={x} className="hot" x={x} y="30" width={w} height="20" rx="10" fill="#ff5a1f" style={glow} />)}
               {Array.from({ length: 22 }, (_, k) => <rect key={k} x={8 + k * 19} y="62" width="1" height="6" fill="rgb(255 255 255 / 0.18)" />)}
               <text x="30" y="20" fontSize="11" fill="#8b8b90">12:04</text><text x="170" y="20" fontSize="11" fill="#8b8b90">27:41</text><text x="318" y="20" fontSize="11" fill="#8b8b90">55:02</text>
             </svg>
@@ -350,20 +404,20 @@ export function FeaturesBento() {
             <svg viewBox="0 0 200 120" className="w-full max-w-[220px]" aria-hidden>
               <rect x="1" y="1" width="198" height="112" rx="10" fill="#1d1d20" stroke="rgb(255 255 255 / 0.12)" />
               <circle cx="122" cy="48" r="13" fill="#3a3a3f" /><rect x="104" y="64" width="36" height="40" rx="18" fill="#3a3a3f" />
-              <rect x="90" y="6" width="62" height="102" rx="6" fill="none" stroke="#ff5a1f" strokeWidth="2" />
+              <rect className="hot" x="90" y="6" width="62" height="102" rx="6" fill="none" stroke="#ff5a1f" strokeWidth="2" style={glow} />
               <circle cx="122" cy="48" r="3" fill="#ff8a3d" />
             </svg>
           </Bento>
           <Bento i={3} className="lg:col-span-2" title="Caption styles" body="Font, size, colours, outline and position, previewed live on the clip.">
             <div className="w-full max-w-[340px] space-y-2.5">
-              <div className="rounded-lg bg-orange px-4 py-2.5 text-center text-[15px] font-extrabold text-white">HOOK SE SHURU KARO</div>
+              <div className="hot rounded-lg bg-orange px-4 py-2.5 text-center text-[15px] font-extrabold text-white shadow-[0_0_24px_rgb(255_90_31/0.45)]">HOOK SE SHURU KARO</div>
               <div className="rounded-lg border border-line bg-sand px-4 py-2.5 text-center text-[15px] font-bold text-ink [text-shadow:0_2px_0_#000]">Hook se shuru karo</div>
               <div className="rounded-lg border border-line bg-sand px-4 py-2.5 text-center text-[14px] font-medium italic text-ink-2">hook se shuru karo</div>
             </div>
           </Bento>
           <Bento i={4} className="lg:col-span-2" title="One-click export" body="Pick the clips you want and export them together, hardware-accelerated where your GPU allows.">
             <div className="flex w-full max-w-[360px] items-center gap-6">
-              <div className="grid size-20 shrink-0 place-items-center rounded-xl bg-orange"><Download className="size-8 text-white" /></div>
+              <div className="hot grid size-20 shrink-0 place-items-center rounded-2xl bg-orange shadow-[0_18px_40px_-8px_rgb(255_90_31/0.7)]"><Download className="size-8 text-white" /></div>
               <ul className="space-y-2 text-[13.5px] text-ink-2">
                 {["9:16 vertical", "1080 × 1920", "MP4 (H.264)"].map((f) => <li key={f} className="flex items-center gap-2"><span className="size-1.5 rounded-full bg-orange" />{f}</li>)}
               </ul>
@@ -382,6 +436,7 @@ function WaveDome() {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const canvas = ref.current!;
+    const still = reducedMotion();
     let raf = 0, visible = false, last = 0;
     const draw = (t: number) => {
       const w = canvas.clientWidth, h = canvas.clientHeight;
@@ -418,7 +473,7 @@ function WaveDome() {
     };
     draw(0);
     const io = new IntersectionObserver(([e]) => {
-      visible = false && e.isIntersecting; // drawn once; no ambient animation
+      visible = e.isIntersecting && !still;
       cancelAnimationFrame(raf);
       if (visible) raf = requestAnimationFrame(loop);
     });
@@ -439,19 +494,19 @@ export function CaptionDome() {
   return (
     <Section tone="dark" z={4}>
       <div className="container-x relative pt-20 sm:pt-[140px]">
-        <Heading label="Captions" title="Captions for every word.">
+        <Heading label="Captions" icon={Captions} title="Every word, captioned.">
           Speech in Urdu, Hindi and English becomes timed captions you can restyle and edit line by line.
         </Heading>
         <div className="reveal relative mx-auto mt-16 max-w-[900px]" style={delay(0.1)}>
           <div className="relative z-10 mb-[-30px] flex flex-wrap justify-center gap-3 sm:mb-[-60px]">
             {chips.map(([a, hot, b], k) => (
-              <span key={k} className={cx("rounded-lg border border-line bg-canvas px-4 py-2 text-[14px] font-semibold", k === 1 && "sm:-translate-y-6")}>
+              <span key={k} className={cx("rounded-xl border border-line bg-canvas/90 px-4 py-2 text-[14px] font-semibold backdrop-blur", k === 1 && "sm:-translate-y-6")}>
                 {a} <span className="text-orange">{hot}</span> {b}
               </span>
             ))}
           </div>
           <WaveDome />
-
+          <div className="rim-pulse pointer-events-none absolute inset-x-[-10%] bottom-[-60px] h-[160px] bg-[radial-gradient(ellipse_50%_70%_at_50%_100%,var(--color-orange-hot),var(--color-orange)_30%,var(--color-orange-deep)_60%,transparent_78%)] blur-[24px]" />
         </div>
       </div>
     </Section>
@@ -483,15 +538,15 @@ export function PlaygroundAndUseCases() {
   return (
     <Section tone="light" z={5}>
       <div className="container-x relative py-20 sm:py-[140px]">
-        <div className="reveal mx-auto max-w-[760px] overflow-hidden rounded-xl border border-light-line bg-light-card shadow-[0_1px_2px_rgb(0_0_0/0.04)]">
+        <div className="reveal mx-auto max-w-[760px] overflow-hidden rounded-[20px] border border-light-line bg-light-card shadow-[0_20px_60px_rgb(0_0_0/0.06)]">
           <div className="relative h-40 overflow-hidden">
             <div className="absolute left-1/2 top-12 h-[420px] w-[420px] -translate-x-1/2 rounded-full border border-light-line bg-light" />
-            <div className="absolute left-1/2 top-20 grid size-14 -translate-x-1/2 place-items-center rounded-xl bg-orange">
+            <div className="absolute left-1/2 top-20 grid size-14 -translate-x-1/2 place-items-center rounded-full bg-orange shadow-[0_10px_30px_-6px_rgb(255_90_31/0.7)]">
               <Play className="ml-0.5 size-6 fill-white text-white" />
             </div>
           </div>
           <div className="px-6 pb-8 text-center sm:px-10">
-            <h2 className="h-display text-[26px] leading-tight sm:text-[34px]">What ClipXo can do</h2>
+            <h2 className="h-display text-[26px] leading-tight sm:text-[34px]">Choose what ClipXo does</h2>
             <p className="mx-auto mt-3 max-w-[420px] text-[14.5px] text-light-dim">Every option runs on your own video, inside the desktop app.</p>
             <div className="mt-7 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {options.map(([Icon, label]) => (
@@ -500,18 +555,18 @@ export function PlaygroundAndUseCases() {
                 </div>
               ))}
             </div>
-            <a href="#pricing" className="mt-6 flex items-center gap-3 rounded-lg border border-light-line bg-light py-1.5 pl-4 pr-1.5 text-left text-[14px] text-light-dim transition-colors hover:border-orange/40">
+            <a href="#pricing" className="mt-6 flex items-center gap-3 rounded-full border border-light-line bg-light py-1.5 pl-5 pr-1.5 text-left text-[14px] text-light-dim transition-colors hover:border-orange/40">
               <span className="flex-1 truncate">Open a long video in ClipXo: podcast, stream, interview…</span>
-              <span className="grid size-9 shrink-0 place-items-center rounded-md bg-orange text-white"><ArrowUpRight className="size-4" /></span>
+              <span className="grid size-10 shrink-0 place-items-center rounded-full bg-orange text-white"><ArrowUpRight className="size-4" /></span>
             </a>
           </div>
         </div>
 
         <div className="mt-28">
-          <Heading light label="Who uses it" title="Built for creators who publish long videos." />
+          <Heading light label="Who it's for" icon={Users} title="Made for people who talk on camera." />
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {USE_CASES.map(({ title, icon: Icon, points, svg }, i) => (
-              <div key={title} className="reveal rounded-xl border border-light-line bg-light-card p-6 shadow-[0_1px_2px_rgb(0_0_0/0.04)]" style={delay(i * 0.06)}>
+              <div key={title} className="reveal rounded-[20px] border border-light-line bg-light-card p-6 shadow-[0_20px_60px_rgb(0_0_0/0.06)]" style={delay(i * 0.06)}>
                 <div className="flex items-start justify-between">
                   <span className={cx("grid size-7 place-items-center rounded-lg", PASTEL[i % 4])}><Icon className="size-3.5" /></span>
                   <svg viewBox="0 0 80 40" className="h-10 text-[#b9b8b4]" aria-hidden>{svg}</svg>
@@ -536,11 +591,12 @@ const CTA_LABEL: Record<string, string> = { starter: "Get started", pro: "Get Pr
 function PriceCard({ pkg, href }: { pkg: Package; href: string }) {
   const featured = pkg.recommended; // the recommended plan sits in the middle and gets the orange treatment
   return (
-    <div className={cx("relative flex flex-col rounded-xl border bg-canvas p-7", featured ? "order-first border-orange/50 lg:order-none" : "border-line")}>
-      {featured && <span className="absolute -top-3 left-7 rounded-md bg-orange px-2 py-0.5 text-[11.5px] font-medium text-white">Recommended</span>}
+    <div className={cx("relative flex flex-col rounded-[20px] border bg-canvas p-7", featured ? "order-first border-orange/40 lg:order-none" : "border-line")}>
+      {featured && <span className="absolute inset-y-6 left-0 w-px bg-orange shadow-[0_0_12px_2px_rgb(255_90_31/0.6)]" />}
+      {featured && <span className="absolute -top-3 left-7 rounded-full bg-orange px-2.5 py-0.5 text-[11.5px] font-medium text-white">Recommended</span>}
       <div className="flex items-center justify-between gap-2">
         <h3 className="text-[18px] font-semibold">{pkg.name}</h3>
-        {pkg.web_access && <span className="rounded-md border border-line-strong px-2 py-0.5 text-[11px] text-ink-2">Desktop + Web</span>}
+        {pkg.web_access && <span className="rounded-full border border-line-strong px-2.5 py-0.5 text-[11px] text-ink-2">Desktop + Web</span>}
       </div>
       <p className="mt-2 min-h-[42px] text-[14px] leading-snug text-muted">{pkg.tagline}</p>
       <div className="mt-6 flex items-baseline gap-1.5">
@@ -549,7 +605,7 @@ function PriceCard({ pkg, href }: { pkg: Package; href: string }) {
       </div>
       <p className="mt-1.5 text-[14px] text-ink-2">{Number(pkg.daily_hours)} hours of video a day</p>
       <Link to={href} className={cx("mt-6 inline-flex h-11 items-center justify-center rounded-xl text-[14px] font-medium transition-colors",
-        featured ? "bg-orange text-white hover:bg-[#ff6e3a]" : "bg-sand text-ink hover:bg-[#232326]")}>
+        featured ? "btn-ember bg-orange text-white hover:bg-[#ff6e3a]" : "bg-sand text-ink hover:bg-[#232326]")}>
         {CTA_LABEL[pkg.slug] ?? `Get ${pkg.name}`}
       </Link>
       <ul className="mt-7 space-y-3 border-t border-line pt-6 text-[14px]">
@@ -568,11 +624,11 @@ export function Pricing() {
   return (
     <Section id="pricing" tone="dark" z={6}>
       <div className="container-x relative py-20 sm:py-[140px]">
-        <Heading label="Pricing" title="Plans and pricing">
+        <Heading label="Pricing" icon={Tag} title="Simple plans, paid in rupees.">
           Pay by bank transfer. Your plan starts the day we confirm your payment.
         </Heading>
         {loading ? (
-          <div className="mt-14 grid gap-4 lg:grid-cols-3">{[0, 1, 2].map((i) => <div key={i} className="h-[420px] animate-pulse rounded-xl bg-canvas" />)}</div>
+          <div className="mt-14 grid gap-4 lg:grid-cols-3">{[0, 1, 2].map((i) => <div key={i} className="h-[420px] animate-pulse rounded-[20px] bg-canvas" />)}</div>
         ) : error ? (
           <p className="mt-14 text-center text-[14px] text-red">Prices could not be loaded. Please refresh the page.</p>
         ) : (
@@ -603,10 +659,10 @@ export function Faq() {
   return (
     <Section id="faq" tone="dark" z={7}>
       <div className="container-x relative max-w-[820px] py-20 sm:py-[140px]">
-        <Heading label="FAQ" title="Frequently asked questions" />
+        <Heading label="FAQ" icon={CircleHelp} title="Questions, answered." />
         <div className="reveal mt-12 space-y-2">
           {FAQS.map(([q, a], i) => (
-            <div key={q} className="rounded-lg border border-line bg-canvas">
+            <div key={q} className="rounded-[14px] border border-line bg-canvas">
               <button className="flex w-full items-center gap-3 px-5 py-4 text-left" onClick={() => setOpen(open === i ? null : i)} aria-expanded={open === i}>
                 <ChevronRight className={cx("size-4 shrink-0 text-orange transition-transform duration-300", open === i && "rotate-90")} />
                 <span className="text-[15px] font-medium">{q}</span>
@@ -628,10 +684,12 @@ export function ClosingCta() {
   return (
     <Section tone="dark" z={8}>
       <div className="container-x relative pb-10 pt-6 sm:pb-16">
-        <div className="reveal relative overflow-hidden rounded-xl border border-line bg-canvas px-6 py-20 text-center sm:py-24">
-          <h2 className="h-display relative text-[28px] leading-[1.1] sm:text-[44px]">Start with your next video.</h2>
+        <div className="reveal relative overflow-hidden rounded-[28px] border border-line bg-canvas px-6 pb-40 pt-20 text-center sm:pt-24">
+          <div className="grid-bg absolute inset-0" />
+          <div className="pointer-events-none absolute inset-x-[-10%] bottom-[-90px] h-[260px] bg-[radial-gradient(ellipse_50%_80%_at_50%_100%,#fff3ea,var(--color-orange-hot)_18%,var(--color-orange)_38%,var(--color-orange-deep)_62%,transparent_80%)] blur-[18px]" />
+          <h2 className="h-display relative text-[28px] leading-[1.1] sm:text-[44px]">Turn your next video<br />into ten clips.</h2>
           <p className="relative mx-auto mt-4 max-w-[420px] text-[15px] text-muted">Plans from Rs. 2,099. Activated the day we confirm your payment.</p>
-          <a href="#pricing" className={orangeBtn("relative mt-8")}>Get started <ArrowRight className="size-4" /></a>
+          <a href="#pricing" className={whiteBtn("relative mt-8 h-11 px-6 text-[14px]")}>Get started <ArrowRight className="size-4" /></a>
         </div>
       </div>
     </Section>

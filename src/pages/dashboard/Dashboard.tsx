@@ -273,7 +273,7 @@ export function DownloadPage() {
               <div className="space-y-4">
                 {d.sub?.instructions && (
                   <div className="card p-6">
-                    <h2 className="text-[15px] font-semibold">Notes from our team</h2>
+                    <h2 className="text-[15px] font-semibold">Notes for you</h2>
                     <p className="mt-3 whitespace-pre-line text-[14px] leading-relaxed text-ink-2">{d.sub.instructions}</p>
                   </div>
                 )}
