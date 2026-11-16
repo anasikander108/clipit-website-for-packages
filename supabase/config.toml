@@ -1,0 +1,16 @@
+# Supabase CLI settings for this project (only what differs from the defaults).
+project_id = "clipit-website"
+
+[auth]
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["http://localhost:5173/auth/callback"]
+
+[auth.email]
+enable_confirmations = true
+
+[functions.notify]
+verify_jwt = true
+
+[functions.subscription-reminders]
+# called by pg_cron with a shared secret instead of a user token
+verify_jwt = false
